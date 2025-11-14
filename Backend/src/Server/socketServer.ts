@@ -23,6 +23,11 @@ export class socketServer {
         socket.on(socketEvents.DISCONNECT , ()=>{
             this.handleDisconnect(socket);
         })
+
+        socket.on(socketEvents.SEND_CHUNK , (chunks)=>{
+            console.log(":",chunks) //Can change it to the another method for modularization 
+        })
+
     }
 
     private async handleUserJoin(socket:Socket  , username:string , roomId:string ){
