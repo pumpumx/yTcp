@@ -8,15 +8,20 @@ export class socketServer {
     private io:Server;
     constructor(io:Server) {
         this.io = io
-        this.io.on('connection', (socket) => this.handleConnection(socket));
+        this.io.on(socketEvents.CONNECTION, (socket) => this.handleConnection(socket));
     }
 
     private handleConnection(socket: Socket) { //Responsible for as handling socket connection methods
+        
         console.log("User connected with socketId: ", socket.id);
-
         socket.on(socketEvents.SEND_USER_INFO, (data: { username: string, roomId: string}) => {
             console.log("User connection recieved")
             this.handleUserJoin(socket , data.username ,  data.roomId);  
+        })
+
+
+        socket.on(socketEvents.DISCONNECT , ()=>{
+            this.handleDisconnect(socket);
         })
     }
 
@@ -38,7 +43,7 @@ export class socketServer {
             console.log("Some error occured while handeling user joined",error)
         } //Notify the room member that user has joined the room
     }
-     
+ 
     private handleDisconnect(socket:Socket){
         this.rooms.forEach((room)=>{
             room.getUser().forEach((user) => {

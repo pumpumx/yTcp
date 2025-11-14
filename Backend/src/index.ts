@@ -2,15 +2,13 @@
 import {config} from 'dotenv'
 import { databaseConnection } from './db/connectDB.ts';
 import path from 'path'
-import https from "https"
 import http from 'http'
+import https from 'https'
 import { app } from './app.ts';
 import { Server } from 'socket.io';
 import { socketServer } from './Server/socketServer.ts';
 import fs from "fs"
 import { fileURLToPath } from 'url';
-
-
 const envPath:(string) = path.resolve("/home/pumpum/coding/WeTalk/Backend/src","../.env")  
 config()
     
@@ -18,8 +16,7 @@ config()
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename)
 
-//Uncomment to enable database connectivity
-// await databaseConnection()  
+// await databaseConnection()
 // .then(()=>{
 //     try {
 //         console.log("Database connected succesfully")
@@ -41,15 +38,15 @@ const io = new Server(server , {
     cors:{origin:"*",
         credentials:true,
     },
-    transports:["polling" , "websocket","webtransport" ]
+    transports:["polling" , "websocket"]
 })
 
-new socketServer(io);
+export const socketServerClass = new socketServer(io);
 
 
 const port = Number(process.env.APP_PORT)
 
-server.listen(port , '0.0.0.0', ()=>{
+server.listen(port , ()=>{
     console.log("Server listening on port" , port)
 })
 
